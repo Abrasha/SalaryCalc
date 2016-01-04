@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
+        <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+
+        <property name="hibernate.connection.url">jdbc:derby:salary_calc_db;create=true</property>
+
+        <property name="hbm2ddl.auto">update</property>
+
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <mapping class="com.aabrasha.java.entity.Employee"/>
+        <mapping class="com.aabrasha.java.entity.Address"/>
+        <mapping class="com.aabrasha.java.entity.Company"/>
+        <mapping class="com.aabrasha.java.entity.PensionFund"/>
+
+    </session-factory>
+
+</hibernate-configuration>

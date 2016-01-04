@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aabrasha.res.view.root.RootController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Файл">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onExitMenuClicked" text="Выход" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Отчеты">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Зарплата" />
+                  <MenuItem mnemonicParsing="false" text="Пенсионный Фонд" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Справочники">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onEmployeesMenuClicked" text="Сотрудники" />
+                  <MenuItem mnemonicParsing="false" onAction="#onAddressesMenuClicked" text="Адресна книга" />
+                  <MenuItem mnemonicParsing="false" onAction="#onLeadershipMenuClicked" text="Руководство" />
+                  <MenuItem mnemonicParsing="false" onAction="#onAboutCompanyMenuClicked" text="О компании" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <StackPane prefHeight="150.0" prefWidth="200.0" />
+            <StackPane prefHeight="150.0" prefWidth="200.0" />
+        </items>
+      </SplitPane>
+   </center>
+   <bottom>
+      <Label text="Label" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
