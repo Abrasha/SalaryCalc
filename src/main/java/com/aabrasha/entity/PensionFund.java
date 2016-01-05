@@ -93,4 +93,13 @@ public class PensionFund implements Serializable {
     }
 
 
+
+    @Override
+    public String toString(){
+        return "PensionFund{" +
+                "id=" + id.get() +
+                ", name=" + name.get() +
+                ", code=" + code.get() +
+                '}';
+    }
 }
