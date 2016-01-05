@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aabrasha.res.view.root.RootController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bordered" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aabrasha.view.root.RootPresenter">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -25,14 +27,19 @@
                   <MenuItem mnemonicParsing="false" onAction="#onAboutCompanyMenuClicked" text="О компании" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Печать">
+               <items>
+                  <MenuItem fx:id="btnPrintContent" mnemonicParsing="false" onAction="#onPrintContentClicked" text="Напечатать содержимое" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
    <center>
-      <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="splitPane" dividerPositions="0.275" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <StackPane prefHeight="150.0" prefWidth="200.0" />
-            <StackPane prefHeight="150.0" prefWidth="200.0" />
+            <StackPane fx:id="menuPane" prefHeight="150.0" prefWidth="200.0" />
+            <StackPane fx:id="contentPane" prefHeight="150.0" prefWidth="200.0" />
         </items>
       </SplitPane>
    </center>

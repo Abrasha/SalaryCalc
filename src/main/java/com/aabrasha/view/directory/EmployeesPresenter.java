@@ -3,15 +3,20 @@ package com.aabrasha.view.directory;
 import com.aabrasha.entity.Address;
 import com.aabrasha.entity.Company;
 import com.aabrasha.entity.Employee;
-import javafx.collections.ListChangeListener;
+import com.aabrasha.view.custom.LocalDateTableCell;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import org.datafx.controller.FXMLController;
-import org.datafx.controller.context.ApplicationContext;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 
+import javax.inject.Inject;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -19,73 +24,154 @@ import java.util.ResourceBundle;
 /**
  * Created by abrasha on 12/27/15.
  */
-@FXMLController("/com/aabrasha/view/directory/employees.fxml")
 public class EmployeesPresenter implements Initializable {
 
+    @Inject
+    Company company;
     @FXML
     private TableView<Employee> tvEmployee;
-
     @FXML
     private ContextMenu rowContext;
+
+    @FXML
+    TableColumn<Employee, String> fnameCol;
+
+    @FXML
+    TableColumn<Employee, String> lnameCol;
+
+    @FXML
+    TableColumn<Employee, String> patronymicCol;
+
+    @FXML
+    TableColumn<Employee, String> passportCol;
+
+    @FXML
+    TableColumn<Employee, String> positionCol;
+
+    @FXML
+    TableColumn<Employee, String> codeCol;
+
+    @FXML
+    TableColumn<Employee, String> phoneCol;
+
+    @FXML
+    TableColumn<Employee, LocalDate> hiredCol;
+
+    @FXML
+    TableColumn<Employee, LocalDate> firedCol;
+
+    @FXML
+    TableColumn<Employee, Boolean> hasExpBookCol;
+
+    @FXML
+    TableColumn<Employee, Address> addressCol;
+
 
 
     @SuppressWarnings(value = "unchecked")
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
-        Company company = ApplicationContext.getInstance().getRegisteredObject(Company.class);
 
         tvEmployee.setEditable(true);
-        tvEmployee.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-
-        rowContext.setOnAction(e -> {
-            System.out.println(e.getSource());
-            System.out.println(e.getEventType());
-            System.out.println(e.getTarget());
-        });
-
-        tvEmployee.getSelectionModel().getSelectedItems().addListener((ListChangeListener) c -> System.out.println(c.getList()));
 
 
         TableColumn<Employee, Number> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(e -> e.getValue().idProperty());
+        idCol.setCellFactory(TextFieldTableCell.<Employee, Number>forTableColumn(new NumberStringConverter()));
+        idCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setId(e.getNewValue().intValue());
+        });
 
-        TableColumn<Employee, String> firstNameCol = new TableColumn<>("Имя");
-        firstNameCol.setCellValueFactory(e -> e.getValue().fnameProperty());
+        fnameCol.setCellValueFactory(e -> e.getValue().fnameProperty());
+        fnameCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        fnameCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setFname(e.getNewValue());
+        });
 
-        TableColumn<Employee, String> lastNameCol = new TableColumn<>("Фамилия");
-        lastNameCol.setCellValueFactory(e -> e.getValue().lnameProperty());
+        lnameCol.setCellValueFactory(e -> e.getValue().lnameProperty());
+        lnameCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        lnameCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setLname(e.getNewValue());
+        });
 
-        TableColumn<Employee, String> patronymicCol = new TableColumn<>("Отчество");
         patronymicCol.setCellValueFactory(e -> e.getValue().patronymicProperty());
+        patronymicCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        patronymicCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setPatronymic(e.getNewValue());
+        });
 
-        TableColumn<Employee, String> passportCol = new TableColumn<>("Паспорт");
         passportCol.setCellValueFactory(e -> e.getValue().passportProperty());
+        passportCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        passportCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setPassport(e.getNewValue());
+        });
 
-        TableColumn<Employee, String> positionCol = new TableColumn<>("Должность");
         positionCol.setCellValueFactory(e -> e.getValue().positionProperty());
+        positionCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        positionCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setPosition(e.getNewValue());
+        });
 
-        TableColumn<Employee, String> codeCol = new TableColumn<>("Код");
         codeCol.setCellValueFactory(e -> e.getValue().codeProperty());
+        codeCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        codeCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setCode(e.getNewValue());
+        });
 
-        TableColumn<Employee, LocalDate> hiredCol = new TableColumn<>("Hired");
         hiredCol.setCellValueFactory(e -> e.getValue().hiredProperty());
+        hiredCol.setCellFactory(p -> new LocalDateTableCell<>());
 
-        TableColumn<Employee, LocalDate> firedCol = new TableColumn<>("Fired");
         firedCol.setCellValueFactory(e -> e.getValue().firedProperty());
+        firedCol.setCellFactory(p -> new LocalDateTableCell<>());
 
-        TableColumn<Employee, Boolean> hasExpBookCol = new TableColumn<>("Наличие трудовой");
         hasExpBookCol.setCellValueFactory(e -> e.getValue().hasExpBookProperty());
+        hasExpBookCol.setCellFactory(e -> {
+            CheckBoxTableCell cell = new CheckBoxTableCell();
+            cell.setSelectedStateCallback(new Callback<Integer, ObservableValue<Boolean>>() {
+                @Override
+                public ObservableValue<Boolean> call(Integer index){
+                    return tvEmployee.getItems().get(index.intValue()).hasExpBookProperty();
+                }
+            });
+            return cell;
+        });
 
-        TableColumn<Employee, Address> addressCol = new TableColumn<>("Address");
         addressCol.setCellValueFactory(e -> e.getValue().addressProperty());
+        addressCol.setCellFactory(TextFieldTableCell.<Employee, Address>forTableColumn(new StringConverter<Address>() {
+            @Override
+            public String toString(Address object){
+                return object.toString();
+            }
 
-        TableColumn<Employee, String> phoneCol = new TableColumn<>("Phone");
+
+
+            @Override
+            public Address fromString(String string){
+                return Address.valueOf(string);
+            }
+        }));
+        addressCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setAddress(e.getNewValue());
+        });
+
         phoneCol.setCellValueFactory(e -> e.getValue().phoneProperty());
+        phoneCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
+        phoneCol.setOnEditCommit(e -> {
+            if (e.getNewValue() != null)
+                e.getRowValue().setPhone(e.getNewValue());
+        });
 
 
-        tvEmployee.getColumns().addAll(codeCol, lastNameCol, firstNameCol, patronymicCol, positionCol, passportCol, addressCol, hiredCol, firedCol, hasExpBookCol, phoneCol);
+        tvEmployee.getColumns().add(idCol);
         tvEmployee.setItems(company.employees());
     }
 
