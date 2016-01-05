@@ -1,15 +1,16 @@
-package com.aabrasha.controllers;
+package com.aabrasha.view.directory;
 
 import com.aabrasha.entity.Address;
+import com.aabrasha.entity.Company;
 import com.aabrasha.entity.Employee;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.datafx.controller.FXMLController;
+import org.datafx.controller.context.ApplicationContext;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ import java.util.ResourceBundle;
 /**
  * Created by abrasha on 12/27/15.
  */
-public class EmployeesListController implements Initializable {
+@FXMLController("/com/aabrasha/view/directory/employees.fxml")
+public class EmployeesPresenter implements Initializable {
 
     @FXML
     private TableView<Employee> tvEmployee;
@@ -26,14 +28,15 @@ public class EmployeesListController implements Initializable {
     @FXML
     private ContextMenu rowContext;
 
-    private ObservableList<Employee> observableEmployees;
 
-
-
+    @SuppressWarnings(value = "unchecked")
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
+        Company company = ApplicationContext.getInstance().getRegisteredObject(Company.class);
+
         tvEmployee.setEditable(true);
+        tvEmployee.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 
         rowContext.setOnAction(e -> {
@@ -44,8 +47,6 @@ public class EmployeesListController implements Initializable {
 
         tvEmployee.getSelectionModel().getSelectedItems().addListener((ListChangeListener) c -> System.out.println(c.getList()));
 
-
-        observableEmployees = FXCollections.observableArrayList();
 
         TableColumn<Employee, Number> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(e -> e.getValue().idProperty());
@@ -85,15 +86,7 @@ public class EmployeesListController implements Initializable {
 
 
         tvEmployee.getColumns().addAll(codeCol, lastNameCol, firstNameCol, patronymicCol, positionCol, passportCol, addressCol, hiredCol, firedCol, hasExpBookCol, phoneCol);
-        tvEmployee.setItems(observableEmployees);
-    }
-
-
-
-    public void setEmployees(ObservableList<Employee> employees){
-        System.out.println(employees);
-        this.observableEmployees = employees;
-        tvEmployee.setItems(observableEmployees);
+        tvEmployee.setItems(company.employees());
     }
 
 
