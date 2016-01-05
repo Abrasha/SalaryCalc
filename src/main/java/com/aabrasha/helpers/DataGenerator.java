@@ -18,38 +18,41 @@ public class DataGenerator {
         List<Employee> employees = new ArrayList<>(3);
 
         Employee employee1 = new Employee();
+        employee1.setId(1);
         employee1.setFname("Андрей");
         employee1.setLname("Абрамов");
         employee1.setPatronymic("Владимирович");
         employee1.setPosition("Boss");
         employee1.setCode("4515254");
         employee1.setPassport("MA 9784587");
-        employee1.setAddress(new Address("Киев", "Княжий Затон", "14", 19, "236523"));
+        employee1.setAddress(new Address("Киев", "Княжий Затон, 14г, кв. 19", "236523"));
         employee1.setHired(LocalDate.now());
         employee1.setFired(LocalDate.now());
         employee1.setHasExpBook(false);
         employee1.setPhone("+380978847054");
 
         Employee employee2 = new Employee();
+        employee2.setId(2);
         employee2.setFname("Татьяна");
         employee2.setLname("Абрамова");
         employee2.setPatronymic("Викторовна");
         employee2.setPosition("Dispatcher");
         employee2.setCode("29387952");
         employee2.setPassport("АМ 235246");
-        employee2.setAddress(new Address("Киев", "Урловская", "24", 47, "83457"));
+        employee2.setAddress(new Address("Киев", "Урловская, 112в, кв. 62", "1351234"));
         employee2.setHired(LocalDate.now());
         employee2.setFired(LocalDate.now());
         employee2.setHasExpBook(true);
         employee2.setPhone("+380677775897");
 
         Employee employee3 = new Employee();
+        employee3.setId(3);
         employee3.setFname("Александра");
         employee3.setLname("Абрамова");
         employee3.setPatronymic("Михайловна");
         employee3.setCode("2345624");
         employee3.setPassport("ЦА 874547");
-        employee3.setAddress(new Address("Киев", "Драгоманова", "61", 41, "03240"));
+        employee3.setAddress(new Address("Киев", "Драгоманова, 61, 41", "03240"));
         employee3.setHired(LocalDate.now());
         employee3.setFired(LocalDate.now());
         employee3.setPosition("Main Accountant");
@@ -75,7 +78,7 @@ public class DataGenerator {
         employees.forEach(e -> e.setCompany(res));
 
         res.setName("ТОВ \"Архивист\"");
-        res.setAddress(new Address("Киев", "Ревуцкого", "41", 12, "024564"));
+        res.setAddress(new Address("Киев", "Ревуцкого, 41, оф. 12", "024564"));
         res.setAccount("84645453212315");
         res.setBoss(employees.stream().filter(e -> e.getPosition().equals("Boss")).findFirst().get());
         res.setMainAccountant(employees.stream().filter(e -> e.getPosition().equals("Main Accountant")).findFirst().get());

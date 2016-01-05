@@ -146,7 +146,7 @@ public class Employee implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     public Company getCompany(){
-        return company.get();
+        return company.getValue();
     }
 
 
@@ -289,19 +289,12 @@ public class Employee implements Serializable {
 
     @Override
     public String toString(){
-        return "Employee{" +
-                "id=" + id.get() +
-                ", fname=" + fname.get() +
-                ", lname=" + lname.get() +
-                ", patronymic=" + patronymic.get() +
-                ", code=" + code.get() +
-                ", passport=" + passport.get() +
-                ", position=" + position.get() +
-                ", hired=" + hired.get() +
-                ", fired=" + fired.get() +
-                ", hasExpBook=" + hasExpBook.get() +
-                ", address=" + address.get() +
-                ", phone=" + phone.get() +
-                '}';
+        StringBuilder builder = new StringBuilder();
+        builder.append(lname.get())
+                .append(' ')
+                .append(fname.get())
+                .append(' ')
+                .append(patronymic.get());
+        return builder.toString();
     }
 }

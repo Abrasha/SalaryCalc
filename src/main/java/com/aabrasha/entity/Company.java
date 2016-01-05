@@ -103,7 +103,7 @@ public class Company implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     public PensionFund getPensionFund(){
-        return pensionFund.get();
+        return pensionFund.getValue();
     }
 
 
@@ -116,7 +116,7 @@ public class Company implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     public Employee getBoss(){
-        return boss.get();
+        return boss.getValue();
     }
 
 
@@ -129,7 +129,7 @@ public class Company implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     public Employee getMainAccountant(){
-        return mainAccountant.get();
+        return mainAccountant.getValue();
     }
 
 
@@ -137,6 +137,7 @@ public class Company implements Serializable {
     public void setMainAccountant(Employee mainAccountant){
         this.mainAccountant.set(mainAccountant);
     }
+
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")

@@ -1,5 +1,6 @@
 package com.aabrasha.entity;
 
+import com.aabrasha.helpers.StringUtilsExtra;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,9 +19,7 @@ public class Address implements Serializable {
     private IntegerProperty id = new SimpleIntegerProperty(0);
 
     private StringProperty city = new SimpleStringProperty();
-    private StringProperty street = new SimpleStringProperty();
-    private StringProperty building = new SimpleStringProperty();
-    private IntegerProperty flat = new SimpleIntegerProperty();
+    private StringProperty localAddress = new SimpleStringProperty();
     private StringProperty postcode = new SimpleStringProperty();
 
 
@@ -30,12 +29,25 @@ public class Address implements Serializable {
 
 
 
-    public Address(String city, String street, String building, int flat, String postcode){
+    public Address(String city, String localAddress, String postcode){
         this.city.set(city);
-        this.street.set(street);
-        this.building.set(building);
-        this.flat.set(flat);
+        this.localAddress.set(localAddress);
         this.postcode.set(postcode);
+    }
+
+
+
+    //"Kiev, mira, 14, kB 12, 8484"
+    public static Address valueOf(String value){
+        String[] parts = value.split(",");
+        String localAddress = StringUtilsExtra.removeFirstCharacter(parts[1]);
+        for (int i = 2; i < parts.length - 1; i++){
+            localAddress += ',' + parts[i];
+        }
+        String city = parts[0];
+        String postCode = StringUtilsExtra.removeFirstCharacter(parts[parts.length - 1]);
+
+        return new Address(city, localAddress, postCode);
     }
 
 
@@ -69,43 +81,15 @@ public class Address implements Serializable {
 
 
     @Basic
-    @Column(name = "street")
-    public String getStreet(){
-        return street.get();
+    @Column(name = "local_ddress")
+    public String getLocalAddress(){
+        return localAddress.get();
     }
 
 
 
-    public void setStreet(String street){
-        this.street.set(street);
-    }
-
-
-
-    @Basic
-    @Column(name = "building")
-    public String getBuilding(){
-        return building.get();
-    }
-
-
-
-    public void setBuilding(String building){
-        this.building.set(building);
-    }
-
-
-
-    @Basic
-    @Column(name = "flat")
-    public int getFlat(){
-        return flat.get();
-    }
-
-
-
-    public void setFlat(int flat){
-        this.flat.set(flat);
+    public void setLocalAddress(String street){
+        this.localAddress.set(street);
     }
 
 
@@ -130,20 +114,8 @@ public class Address implements Serializable {
 
 
 
-    public StringProperty streetProperty(){
-        return street;
-    }
-
-
-
-    public StringProperty buildingProperty(){
-        return building;
-    }
-
-
-
-    public IntegerProperty flatProperty(){
-        return flat;
+    public StringProperty localAddressProperty(){
+        return localAddress;
     }
 
 
@@ -166,11 +138,7 @@ public class Address implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append(city.get())
                 .append(", ")
-                .append(street.get())
-                .append(", ")
-                .append(building.get())
-                .append(", ")
-                .append(flat.get())
+                .append(localAddress.get())
                 .append(", ")
                 .append(postcode.get());
 
