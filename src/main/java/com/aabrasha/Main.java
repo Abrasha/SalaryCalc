@@ -33,6 +33,7 @@ public class Main extends Application {
         Injector.setConfigurationSource(props::get);
         RootView employeesView = new RootView();
         RootPresenter rootPresenter = (RootPresenter) employeesView.getPresenter();
+
         props.put("rootPresenter", rootPresenter);
         rootPresenter.setMenu(new DirectoryMenuView().getView());
 
