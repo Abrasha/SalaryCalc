@@ -1,5 +1,9 @@
 package com.aabrasha.view.menus;
 
+import com.aabrasha.view.directory.CompanyView;
+import com.aabrasha.view.directory.EmployeesView;
+import com.aabrasha.view.manager.LayoutManager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -37,15 +41,19 @@ public class DirectoryMenuPresenter implements Initializable {
 
 
     @FXML
-    private void onBtnEmployeesClicked() {
-
+    private void onBtnEmployeesClicked(){
+        Platform.runLater(() -> {
+            LayoutManager.getInstance().setContent(EmployeesView.class);
+        });
     }
 
 
 
     @FXML
     private void onBtnCompanyClicked(){
-        System.out.println("comp");
+        Platform.runLater(() -> {
+            LayoutManager.getInstance().setContent(CompanyView.class);
+        });
     }
 
 
