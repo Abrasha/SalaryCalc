@@ -3,6 +3,7 @@ package com.aabrasha.view.directory;
 import com.aabrasha.entity.Address;
 import com.aabrasha.entity.Company;
 import com.aabrasha.entity.Employee;
+import com.aabrasha.helpers.PrinterAPI;
 import com.aabrasha.view.custom.LocalDateTableCell;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -29,42 +30,31 @@ public class EmployeesPresenter implements Initializable {
     @Inject
     Company company;
     @FXML
+    TableColumn<Employee, String> fnameCol;
+    @FXML
+    TableColumn<Employee, String> lnameCol;
+    @FXML
+    TableColumn<Employee, String> patronymicCol;
+    @FXML
+    TableColumn<Employee, String> passportCol;
+    @FXML
+    TableColumn<Employee, String> positionCol;
+    @FXML
+    TableColumn<Employee, String> codeCol;
+    @FXML
+    TableColumn<Employee, String> phoneCol;
+    @FXML
+    TableColumn<Employee, LocalDate> hiredCol;
+    @FXML
+    TableColumn<Employee, LocalDate> firedCol;
+    @FXML
+    TableColumn<Employee, Boolean> hasExpBookCol;
+    @FXML
+    TableColumn<Employee, Address> addressCol;
+    @FXML
     private TableView<Employee> tvEmployee;
     @FXML
     private ContextMenu rowContext;
-
-    @FXML
-    TableColumn<Employee, String> fnameCol;
-
-    @FXML
-    TableColumn<Employee, String> lnameCol;
-
-    @FXML
-    TableColumn<Employee, String> patronymicCol;
-
-    @FXML
-    TableColumn<Employee, String> passportCol;
-
-    @FXML
-    TableColumn<Employee, String> positionCol;
-
-    @FXML
-    TableColumn<Employee, String> codeCol;
-
-    @FXML
-    TableColumn<Employee, String> phoneCol;
-
-    @FXML
-    TableColumn<Employee, LocalDate> hiredCol;
-
-    @FXML
-    TableColumn<Employee, LocalDate> firedCol;
-
-    @FXML
-    TableColumn<Employee, Boolean> hasExpBookCol;
-
-    @FXML
-    TableColumn<Employee, Address> addressCol;
 
 
 
@@ -148,7 +138,9 @@ public class EmployeesPresenter implements Initializable {
         addressCol.setCellFactory(TextFieldTableCell.<Employee, Address>forTableColumn(new StringConverter<Address>() {
             @Override
             public String toString(Address object){
-                return object.toString();
+                if (object != null)
+                    return object.toString();
+                return "";
             }
 
 
@@ -173,6 +165,20 @@ public class EmployeesPresenter implements Initializable {
 
         tvEmployee.getColumns().add(idCol);
         tvEmployee.setItems(company.employees());
+    }
+
+
+
+    @FXML
+    private void onBtnPrintDataClicked(){
+        PrinterAPI.getInstance().print(tvEmployee);
+    }
+
+
+
+    @FXML
+    private void onBtnAddEmployeeClicked(){
+        company.addEmployee(new Employee());
     }
 
 
