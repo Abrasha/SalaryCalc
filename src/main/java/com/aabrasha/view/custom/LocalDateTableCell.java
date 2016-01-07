@@ -68,11 +68,13 @@ public class LocalDateTableCell<S> extends TableCell<S, LocalDate> {
     protected void updateItem(LocalDate item, boolean empty){
         super.updateItem(item, empty);
 
-        if (empty){
+        if (item == null || empty){
             setText(null);
             setGraphic(null);
         } else {
-            datePicker.setValue(item);
+
+            if (!item.equals(LocalDate.MAX))
+                datePicker.setValue(item);
             setGraphic(datePicker);
         }
 
