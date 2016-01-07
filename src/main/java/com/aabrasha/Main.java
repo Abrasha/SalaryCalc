@@ -1,6 +1,8 @@
 package com.aabrasha;
 
 import com.aabrasha.helpers.DataGenerator;
+import com.aabrasha.view.directory.EmployeesView;
+import com.aabrasha.view.manager.LayoutManager;
 import com.aabrasha.view.menus.DirectoryMenuView;
 import com.aabrasha.view.root.RootPresenter;
 import com.aabrasha.view.root.RootView;
@@ -29,19 +31,17 @@ public class Main extends Application {
         Map<Object, Object> props = new HashMap<>(5);
         props.put("company", DataGenerator.getACompany());
         props.put("mainStage", stage);
-
+        props.put("layoutManager", LayoutManager.getInstance());
         Injector.setConfigurationSource(props::get);
-        RootView employeesView = new RootView();
-        RootPresenter rootPresenter = (RootPresenter) employeesView.getPresenter();
 
-        props.put("rootPresenter", rootPresenter);
-        rootPresenter.setMenu(new DirectoryMenuView().getView());
+        RootView rootView = new RootView();
+        RootPresenter rootPresenter = (RootPresenter) rootView.getPresenter();
+        LayoutManager.getInstance().setRootPresenter(rootPresenter);
 
+        LayoutManager.getInstance().setContent(EmployeesView.class);
+        LayoutManager.getInstance().setMenu(DirectoryMenuView.class);
 
-
-
-        Scene scene = new Scene(employeesView.getView());
-
+        Scene scene = new Scene(rootView.getView());
         scene.getStylesheets().add("/com/aabrasha/view/style/style.css");
 
         stage.setMaximized(true);
