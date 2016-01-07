@@ -15,20 +15,20 @@ public class Employee implements Serializable {
 
     private IntegerProperty id = new SimpleIntegerProperty(0);
 
-    private StringProperty fname = new SimpleStringProperty();
-    private StringProperty lname = new SimpleStringProperty();
-    private StringProperty patronymic = new SimpleStringProperty();
+    private StringProperty fname = new SimpleStringProperty("");
+    private StringProperty lname = new SimpleStringProperty("");
+    private StringProperty patronymic = new SimpleStringProperty("");
 
-    private StringProperty code = new SimpleStringProperty();
-    private StringProperty passport = new SimpleStringProperty();
-    private StringProperty position = new SimpleStringProperty();
+    private StringProperty code = new SimpleStringProperty("");
+    private StringProperty passport = new SimpleStringProperty("");
+    private StringProperty position = new SimpleStringProperty("");
 
-    private ObjectProperty<LocalDate> hired = new SimpleObjectProperty<>();
-    private ObjectProperty<LocalDate> fired = new SimpleObjectProperty<>();
+    private ObjectProperty<LocalDate> hired = new SimpleObjectProperty<>(LocalDate.MAX);
+    private ObjectProperty<LocalDate> fired = new SimpleObjectProperty<>(LocalDate.MAX);
 
-    private BooleanProperty hasExpBook = new SimpleBooleanProperty();
+    private BooleanProperty hasExpBook = new SimpleBooleanProperty(false);
 
-    private StringProperty phone = new SimpleStringProperty();
+    private StringProperty phone = new SimpleStringProperty("");
 
     private ObjectProperty<Company> company = new SimpleObjectProperty<>();
     private ObjectProperty<Address> address = new SimpleObjectProperty<>();
@@ -144,6 +144,7 @@ public class Employee implements Serializable {
     }
 
 
+
     @ManyToOne(cascade = CascadeType.ALL)
     public Company getCompany(){
         return company.getValue();
@@ -205,6 +206,23 @@ public class Employee implements Serializable {
 
     public void setAddress(Address address){
         this.address.set(address);
+    }
+
+
+
+    public String getInitials(){
+        StringBuilder builder = new StringBuilder();
+        if (!(lname.get().isEmpty())){
+            builder.append(lname.get()).append(' ');
+        }
+        if (!fname.get().isEmpty()){
+            builder.append(fname.get()).append(' ');
+        }
+        if (!patronymic.get().isEmpty()){
+            builder.append(patronymic.get()).append(' ');
+        }
+        String result = builder.toString();
+        return result.isEmpty() ? "Unnamed" : result;
     }
 
 
