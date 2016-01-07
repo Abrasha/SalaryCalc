@@ -166,6 +166,24 @@ public class Company implements Serializable {
 
 
 
+    public boolean addEmployee(Employee added){
+        return added != null ? employees.add(added) : false;
+    }
+
+
+
+    public void removeEmployee(Employee employee){
+        // TODO
+    }
+
+
+
+    public void removeEmployee(int id){
+        // TODO
+    }
+
+
+
     public IntegerProperty idProperty(){
         return id;
     }
