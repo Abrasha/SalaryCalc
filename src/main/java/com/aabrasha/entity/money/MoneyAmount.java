@@ -1,73 +1,53 @@
 package com.aabrasha.entity.money;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 /**
  * Created by Abrasha on 07-Jan-16.
  */
 public class MoneyAmount {
 
-    private IntegerProperty amount = new SimpleIntegerProperty();
+    private ObjectProperty<BigDecimal> amount = new SimpleObjectProperty<>();
 
 
 
     public MoneyAmount(){
+        amount.set(new BigDecimal(0));
     }
 
 
 
-    public MoneyAmount(int amount){
+    public MoneyAmount(BigDecimal amount){
         this.amount.set(amount);
     }
 
 
 
     public static MoneyAmount valueOf(String s){
-        String[] parts = s.split(",");
+        s = s.replace(',', '.');
+        return new MoneyAmount(new BigDecimal(s));
 
-        if (parts.length > 2){
-            System.out.println("Wrong argument: " + s);
-            return null;
-        }
-
-        if (parts.length == 1){
-            return new MoneyAmount(Integer.valueOf(parts[0]) * 100);
-        }
-
-        if (parts[1].length() > 2){
-            System.out.println("Wrong argument: " + s);
-            return null;
-        }
-
-        int value;
-        int kopecks = 0;
-
-        if (parts[1].length() == 1)
-            kopecks = Integer.valueOf(parts[1]) * 10;
-
-        if (parts[1].length() == 2)
-            kopecks = Integer.valueOf(parts[1]);
-
-        value = Integer.valueOf(parts[0]) * 100 + kopecks;
-        return new MoneyAmount(value);
     }
 
 
 
-    public int getAmount(){
+    public BigDecimal getAmount(){
         return amount.get();
     }
 
 
 
-    public void setAmount(int amount){
+    public void setAmount(BigDecimal amount){
         this.amount.set(amount);
     }
 
 
 
-    public IntegerProperty amountProperty(){
+    public ObjectProperty<BigDecimal> amountProperty(){
         return amount;
     }
 
@@ -85,7 +65,7 @@ public class MoneyAmount {
 
     @Override
     public String toString(){
-
-        return String.format("%d,%02d", amount.get() / 100, amount.get() % 100);
+        DecimalFormat format = new DecimalFormat("###,###.00");
+        return format.format(amount.get().doubleValue());
     }
 }
