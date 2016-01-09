@@ -1,9 +1,8 @@
 package com.aabrasha.helpers;
 
-import com.aabrasha.entity.Address;
-import com.aabrasha.entity.Company;
-import com.aabrasha.entity.Employee;
-import com.aabrasha.entity.PensionFund;
+import com.aabrasha.entity.*;
+import com.aabrasha.entity.reports.monthly.salary.PaymentEntry;
+import javafx.collections.FXCollections;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -86,6 +85,19 @@ public class DataGenerator {
         res.setEdrpou("37561293");
         res.setRegNumber("04215441");
         res.setPensionFund(new PensionFund("ПФ Дарниця", "414123"));
+
+        return res;
+
+    }
+
+    public static List<PaymentEntry> getSomePaymentEntries(List<Employee> employees){
+
+        List<PaymentEntry> res = FXCollections.observableArrayList();
+        int numOfEntries = employees.size();
+
+        res.add(new PaymentEntry(new EmployeesSalary(employees.get(0), 3400.00), 4240.00, 2500.00));
+        res.add(new PaymentEntry(new EmployeesSalary(employees.get(1), 2000.00), 16779.54, 7500.00));
+        res.add(new PaymentEntry(new EmployeesSalary(employees.get(2), 0.00), 4440.08, 2000.00));
 
         return res;
 
