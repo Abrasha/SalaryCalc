@@ -1,9 +1,9 @@
 package com.aabrasha.entity;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
-import java.math.BigDecimal;
 
 /**
  * Created by Abrasha on 07-Jan-16.
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class EmployeesSalary {
 
     private ObjectProperty<Employee> forEmployee = new SimpleObjectProperty<>();
-    private ObjectProperty<BigDecimal> rateSalary = new SimpleObjectProperty<>();
+    private DoubleProperty rateSalary = new SimpleDoubleProperty();
 
 
 
@@ -20,7 +20,7 @@ public class EmployeesSalary {
 
 
 
-    public EmployeesSalary(Employee forEmployee, BigDecimal rateSalary){
+    public EmployeesSalary(Employee forEmployee, double rateSalary){
         this.forEmployee.set(forEmployee);
         this.rateSalary.set(rateSalary);
     }
@@ -45,19 +45,19 @@ public class EmployeesSalary {
 
 
 
-    public BigDecimal getRateSalary(){
+    public double getRateSalary(){
         return rateSalary.get();
     }
 
 
 
-    public void setRateSalary(BigDecimal rateSalary){
+    public void setRateSalary(double rateSalary){
         this.rateSalary.set(rateSalary);
     }
 
 
 
-    public ObjectProperty<BigDecimal> rateSalaryProperty(){
+    public DoubleProperty rateSalaryProperty(){
         return rateSalary;
     }
 }
