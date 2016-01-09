@@ -1,9 +1,9 @@
 package com.aabrasha;
 
 import com.aabrasha.helpers.DataGenerator;
-import com.aabrasha.view.directory.EmployeesView;
 import com.aabrasha.view.manager.LayoutManager;
 import com.aabrasha.view.menus.DirectoryMenuView;
+import com.aabrasha.view.reports.monthly.SalaryView;
 import com.aabrasha.view.root.RootPresenter;
 import com.aabrasha.view.root.RootView;
 import com.airhacks.afterburner.injection.Injector;
@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends Application {
-
 
 
     public static void main(String[] args){
@@ -38,7 +37,7 @@ public class Main extends Application {
         RootPresenter rootPresenter = (RootPresenter) rootView.getPresenter();
         LayoutManager.getInstance().setRootPresenter(rootPresenter);
 
-        LayoutManager.getInstance().setContent(EmployeesView.class);
+        LayoutManager.getInstance().setContent(SalaryView.class);
         LayoutManager.getInstance().setMenu(DirectoryMenuView.class);
 
         Scene scene = new Scene(rootView.getView());
