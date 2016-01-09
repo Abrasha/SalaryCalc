@@ -210,16 +210,16 @@ public class Employee implements Serializable {
 
 
 
-    public String getInitials(){
+    public String getInitials(boolean shortForm){
         StringBuilder builder = new StringBuilder();
-        if (!(lname.get().isEmpty())){
-            builder.append(lname.get()).append(' ');
+        if (!(fname.get().isEmpty())){
+            builder.append(shortForm ? fname.get().charAt(0) : fname.get()).append(shortForm ? ". " : ' ');
+        }
+        if (!(patronymic.get().isEmpty())){
+            builder.append(shortForm ? patronymic.get().charAt(0) : patronymic.get()).append(shortForm ? ". " : ' ');
         }
         if (!fname.get().isEmpty()){
-            builder.append(fname.get()).append(' ');
-        }
-        if (!patronymic.get().isEmpty()){
-            builder.append(patronymic.get()).append(' ');
+            builder.append(fname.get());
         }
         String result = builder.toString();
         return result.isEmpty() ? "Unnamed" : result;
