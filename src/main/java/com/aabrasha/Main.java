@@ -2,8 +2,6 @@ package com.aabrasha;
 
 import com.aabrasha.helpers.DataGenerator;
 import com.aabrasha.view.manager.LayoutManager;
-import com.aabrasha.view.menus.DirectoryMenuView;
-import com.aabrasha.view.reports.monthly.SalaryView;
 import com.aabrasha.view.root.RootPresenter;
 import com.aabrasha.view.root.RootView;
 import com.airhacks.afterburner.injection.Injector;
@@ -36,9 +34,6 @@ public class Main extends Application {
         RootView rootView = new RootView();
         RootPresenter rootPresenter = (RootPresenter) rootView.getPresenter();
         LayoutManager.getInstance().setRootPresenter(rootPresenter);
-
-        LayoutManager.getInstance().setContent(SalaryView.class);
-        LayoutManager.getInstance().setMenu(DirectoryMenuView.class);
 
         Scene scene = new Scene(rootView.getView());
         scene.getStylesheets().add("/com/aabrasha/view/style/style.css");
