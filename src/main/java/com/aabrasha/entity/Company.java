@@ -21,9 +21,9 @@ public class Company implements Serializable {
     private StringProperty edrpou = new SimpleStringProperty();
     private StringProperty account = new SimpleStringProperty();
     private StringProperty regNumber = new SimpleStringProperty();
+    private StringProperty address = new SimpleStringProperty();
 
     private ObjectProperty<PensionFund> pensionFund = new SimpleObjectProperty<>();
-    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
     private ObjectProperty<Employee> boss = new SimpleObjectProperty<>();
     private ObjectProperty<Employee> mainAccountant = new SimpleObjectProperty<>();
 
@@ -101,6 +101,26 @@ public class Company implements Serializable {
 
 
 
+    public void setEmployees(ObservableList<Employee> employees){
+        this.employees = employees;
+    }
+
+
+
+    @Basic
+    @Column(name = "address")
+    public String getAddress(){
+        return address.get();
+    }
+
+
+
+    public void setAddress(String address){
+        this.address.set(address);
+    }
+
+
+
     @OneToOne(cascade = CascadeType.ALL)
     public PensionFund getPensionFund(){
         return pensionFund.getValue();
@@ -152,17 +172,16 @@ public class Company implements Serializable {
     }
 
 
-
-    @OneToOne(cascade = CascadeType.ALL)
-    public Address getAddress(){
-        return address.get();
-    }
-
-
-
-    public void setAddress(Address address){
-        this.address.set(address);
-    }
+//    @OneToOne(cascade = CascadeType.ALL)
+//    public Address getAddress(){
+//        return address.get();
+//    }
+//
+//
+//
+//    public void setAddress(Address address){
+//        this.address.set(address);
+//    }
 
 
 
@@ -220,7 +239,7 @@ public class Company implements Serializable {
 
 
 
-    public ObjectProperty<Address> addressProperty(){
+    public StringProperty addressProperty(){
         return address;
     }
 

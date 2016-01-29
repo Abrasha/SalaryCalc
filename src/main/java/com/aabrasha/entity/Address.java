@@ -38,6 +38,7 @@ public class Address implements Serializable {
 
 
     //"Kiev, mira, 14, kB 12, 8484"
+    @Deprecated
     public static Address valueOf(String value){
         String[] parts = value.split(",");
         String localAddress = StringUtilsExtra.removeFirstCharacter(parts[1]);

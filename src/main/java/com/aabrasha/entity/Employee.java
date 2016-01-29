@@ -23,15 +23,17 @@ public class Employee implements Serializable {
     private StringProperty passport = new SimpleStringProperty("");
     private StringProperty position = new SimpleStringProperty("");
 
-    private ObjectProperty<LocalDate> hired = new SimpleObjectProperty<>(LocalDate.MAX);
-    private ObjectProperty<LocalDate> fired = new SimpleObjectProperty<>(LocalDate.MAX);
+    private StringProperty address = new SimpleStringProperty();
+
+    private ObjectProperty<LocalDate> hired = new SimpleObjectProperty<>(null);
+    private ObjectProperty<LocalDate> fired = new SimpleObjectProperty<>(null);
 
     private BooleanProperty hasExpBook = new SimpleBooleanProperty(false);
 
     private StringProperty phone = new SimpleStringProperty("");
 
     private ObjectProperty<Company> company = new SimpleObjectProperty<>();
-    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
+//    private ObjectProperty<Address> address = new SimpleObjectProperty<>();
 
 
 
@@ -197,14 +199,14 @@ public class Employee implements Serializable {
 
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    public Address getAddress(){
+    @Column(name = "address")
+    public String getAddress(){
         return address.get();
     }
 
 
 
-    public void setAddress(Address address){
+    public void setAddress(String address){
         this.address.set(address);
     }
 
@@ -299,7 +301,7 @@ public class Employee implements Serializable {
 
 
 
-    public ObjectProperty<Address> addressProperty(){
+    public StringProperty addressProperty(){
         return address;
     }
 

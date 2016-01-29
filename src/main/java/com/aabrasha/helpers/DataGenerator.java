@@ -1,6 +1,9 @@
 package com.aabrasha.helpers;
 
-import com.aabrasha.entity.*;
+import com.aabrasha.entity.Company;
+import com.aabrasha.entity.Employee;
+import com.aabrasha.entity.EmployeesSalary;
+import com.aabrasha.entity.PensionFund;
 import com.aabrasha.entity.reports.monthly.salary.PaymentEntry;
 import javafx.collections.FXCollections;
 
@@ -24,7 +27,7 @@ public class DataGenerator {
         employee1.setPosition("Boss");
         employee1.setCode("4515254");
         employee1.setPassport("MA 9784587");
-        employee1.setAddress(new Address("Киев", "Княжий Затон, 14г, кв. 19", "236523"));
+        employee1.setAddress("Киев, Княжий Затон, 14г, кв. 19, 236523");
         employee1.setHired(LocalDate.now());
         employee1.setFired(LocalDate.now());
         employee1.setHasExpBook(false);
@@ -38,7 +41,7 @@ public class DataGenerator {
         employee2.setPosition("Dispatcher");
         employee2.setCode("29387952");
         employee2.setPassport("АМ 235246");
-        employee2.setAddress(new Address("Киев", "Урловская, 112в, кв. 62", "1351234"));
+        employee2.setAddress("Киев, Урловская, 112в, кв. 62, 02095");
         employee2.setHired(LocalDate.now());
         employee2.setFired(LocalDate.now());
         employee2.setHasExpBook(true);
@@ -51,7 +54,7 @@ public class DataGenerator {
         employee3.setPatronymic("Михайловна");
         employee3.setCode("2345624");
         employee3.setPassport("ЦА 874547");
-        employee3.setAddress(new Address("Киев", "Драгоманова, 61, 41", "03240"));
+        employee3.setAddress("Киев, Драгоманова, 61, 41, 03240");
         employee3.setHired(LocalDate.now());
         employee3.setFired(LocalDate.now());
         employee3.setPosition("Main Accountant");
@@ -77,7 +80,8 @@ public class DataGenerator {
         employees.forEach(e -> e.setCompany(res));
 
         res.setName("ТОВ \"Архивист\"");
-        res.setAddress(new Address("Киев", "Ревуцкого, 41, оф. 12", "024564"));
+//        res.setAddress(new Address("Киев", "Ревуцкого, 41, оф. 12", "024564"));
+        res.setAddress("Киев, Ревуцкого, 41, оф. 12, 024564");
         res.setAccount("84645453212315");
         res.setBoss(employees.stream().filter(e -> e.getPosition().equals("Boss")).findFirst().get());
         res.setMainAccountant(employees.stream().filter(e -> e.getPosition().equals("Main Accountant")).findFirst().get());
@@ -89,6 +93,8 @@ public class DataGenerator {
         return res;
 
     }
+
+
 
     public static List<PaymentEntry> getSomePaymentEntries(List<Employee> employees){
 
