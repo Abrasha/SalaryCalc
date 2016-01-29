@@ -84,7 +84,7 @@ public class SalaryPresenter implements Initializable {
 
         ObservableList<Month> months = FXCollections.observableArrayList(Month.values());
         ObservableList<Year> years = FXCollections.observableArrayList();
-        for (int i = Year.now().getValue() - 10; i < )
+        //for (int i = Year.now().getValue() - 10; i < )
 
         tvReport.setEditable(true);
 

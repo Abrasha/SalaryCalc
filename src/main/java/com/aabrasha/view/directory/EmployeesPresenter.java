@@ -1,25 +1,18 @@
 package com.aabrasha.view.directory;
 
-import com.aabrasha.entity.Address;
 import com.aabrasha.entity.Company;
 import com.aabrasha.entity.Employee;
-import com.aabrasha.helpers.PrinterAPI;
-import com.aabrasha.view.custom.LocalDateTableCell;
-import javafx.beans.value.ObservableValue;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
-import javafx.util.converter.NumberStringConverter;
+import javafx.scene.control.*;
+import javafx.util.Duration;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 /**
@@ -30,156 +23,250 @@ public class EmployeesPresenter implements Initializable {
     @Inject
     Company company;
     @FXML
-    TableColumn<Employee, String> fnameCol;
+    private SplitPane container;
     @FXML
-    TableColumn<Employee, String> lnameCol;
+    private ListView<Employee> lvEmployees;
     @FXML
-    TableColumn<Employee, String> patronymicCol;
+    private Button btnRemoveEmployee;
     @FXML
-    TableColumn<Employee, String> passportCol;
+    private Button btnAddEmployee;
     @FXML
-    TableColumn<Employee, String> positionCol;
+    private Button btnUpdateEmployee;
     @FXML
-    TableColumn<Employee, String> codeCol;
+    private Button btnSaveEmployee;
     @FXML
-    TableColumn<Employee, String> phoneCol;
+    private Button btnCancel;
     @FXML
-    TableColumn<Employee, LocalDate> hiredCol;
+    private TextField tfFname;
     @FXML
-    TableColumn<Employee, LocalDate> firedCol;
+    private TextField tfLname;
     @FXML
-    TableColumn<Employee, Boolean> hasExpBookCol;
+    private TextField tfPatronymic;
     @FXML
-    TableColumn<Employee, Address> addressCol;
+    private TextField tfCode;
     @FXML
-    private TableView<Employee> tvEmployee;
+    private TextField tfAddress;
     @FXML
-    private ContextMenu rowContext;
+    private TextField tfPassport;
+    @FXML
+    private TextField tfPosition;
+    @FXML
+    private TextField tfPhone;
+    @FXML
+    private DatePicker dpHired;
+    @FXML
+    private DatePicker dpFired;
+    @FXML
+    private CheckBox cbHasExpBook;
+    private boolean detailesHidden = true;
+    private boolean addingEmployee = false;
+
+    private Timeline hideDetailsAnimation;
+    private Timeline showDetailsAnimation;
+
+    private Employee addedEmployee = null;
 
 
 
-    @SuppressWarnings(value = "unchecked")
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
 
-        tvEmployee.setEditable(true);
+        hideDetailsAnimation = createHideAnimation();
+        showDetailsAnimation = createShowAnimation();
 
+        btnSaveEmployee.setDisable(true);
 
-        TableColumn<Employee, Number> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(e -> e.getValue().idProperty());
-        idCol.setCellFactory(TextFieldTableCell.<Employee, Number>forTableColumn(new NumberStringConverter()));
-        idCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setId(e.getNewValue().intValue());
-        });
+        lvEmployees.setCellFactory(param -> new EmployeeCell());
 
-        fnameCol.setCellValueFactory(e -> e.getValue().fnameProperty());
-        fnameCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        fnameCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setFname(e.getNewValue());
-        });
+        updateEmployeesList();
 
-        lnameCol.setCellValueFactory(e -> e.getValue().lnameProperty());
-        lnameCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        lnameCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setLname(e.getNewValue());
-        });
-
-        patronymicCol.setCellValueFactory(e -> e.getValue().patronymicProperty());
-        patronymicCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        patronymicCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setPatronymic(e.getNewValue());
-        });
-
-        passportCol.setCellValueFactory(e -> e.getValue().passportProperty());
-        passportCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        passportCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setPassport(e.getNewValue());
-        });
-
-        positionCol.setCellValueFactory(e -> e.getValue().positionProperty());
-        positionCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        positionCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setPosition(e.getNewValue());
-        });
-
-        codeCol.setCellValueFactory(e -> e.getValue().codeProperty());
-        codeCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        codeCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setCode(e.getNewValue());
-        });
-
-        hiredCol.setCellValueFactory(e -> e.getValue().hiredProperty());
-        hiredCol.setCellFactory(p -> new LocalDateTableCell<>());
-
-        firedCol.setCellValueFactory(e -> e.getValue().firedProperty());
-        firedCol.setCellFactory(p -> new LocalDateTableCell<>());
-
-        hasExpBookCol.setCellValueFactory(e -> e.getValue().hasExpBookProperty());
-        hasExpBookCol.setCellFactory(e -> {
-            CheckBoxTableCell cell = new CheckBoxTableCell();
-            cell.setSelectedStateCallback(new Callback<Integer, ObservableValue<Boolean>>() {
-                @Override
-                public ObservableValue<Boolean> call(Integer index){
-                    return tvEmployee.getItems().get(index.intValue()).hasExpBookProperty();
+        lvEmployees.getSelectionModel().selectedItemProperty().addListener(e -> {
+            Employee selected = getSelectedEmployee();
+            if (selected == null){
+                if (!detailesHidden){
+                    detailesHidden = true;
+                    btnUpdateEmployee.setDisable(true);
+                    btnRemoveEmployee.setDisable(true);
+                    hideDetailsAnimation.play();
                 }
-            });
-            return cell;
-        });
-
-        addressCol.setCellValueFactory(e -> e.getValue().addressProperty());
-        addressCol.setCellFactory(TextFieldTableCell.<Employee, Address>forTableColumn(new StringConverter<Address>() {
-            @Override
-            public String toString(Address object){
-                if (object != null)
-                    return object.toString();
-                return "";
+            } else {
+                Platform.runLater(() -> this.updateDetailsPanel(getSelectedEmployee()));
+                if (detailesHidden){
+                    detailesHidden = false;
+                    btnUpdateEmployee.setDisable(true);
+                    btnRemoveEmployee.setDisable(false);
+                    showDetailsAnimation.play();
+                }
             }
-
-
-
-            @Override
-            public Address fromString(String string){
-                return Address.valueOf(string);
-            }
-        }));
-        addressCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setAddress(e.getNewValue());
         });
 
-        phoneCol.setCellValueFactory(e -> e.getValue().phoneProperty());
-        phoneCol.setCellFactory(TextFieldTableCell.<Employee>forTableColumn());
-        phoneCol.setOnEditCommit(e -> {
-            if (e.getNewValue() != null)
-                e.getRowValue().setPhone(e.getNewValue());
-        });
+        clearSelections();
+    }
 
 
-        tvEmployee.getColumns().add(idCol);
-        tvEmployee.setItems(company.employees());
+
+    private Timeline createShowAnimation(){
+        final KeyValue kv = new KeyValue(container.getDividers().get(0).positionProperty(), 0.5);
+        final KeyFrame kf = new KeyFrame(Duration.seconds(0.5), kv);
+        return new Timeline(kf);
+    }
+
+
+
+    private Timeline createHideAnimation(){
+        final KeyValue kv = new KeyValue(container.getDividers().get(0).positionProperty(), 1.0);
+        final KeyFrame kf = new KeyFrame(Duration.seconds(0.5), kv);
+        return new Timeline(kf);
+    }
+
+
+
+    private Employee getSelectedEmployee(){
+        return lvEmployees.getSelectionModel().getSelectedItem();
+    }
+
+
+
+    private void updateEmployeesList(){
+        lvEmployees.getItems().clear();
+        lvEmployees.getItems().addAll(company.employees());
+    }
+
+
+
+    private void updateDetailsPanel(Employee selected){
+        tfFname.setText(selected.getFname());
+        tfLname.setText(selected.getLname());
+        tfPatronymic.setText(selected.getPatronymic());
+        tfCode.setText(selected.getCode());
+        tfPassport.setText(selected.getPassport());
+        tfPosition.setText(selected.getPosition());
+        tfAddress.setText(selected.getPosition());
+        dpHired.setValue(selected.getHired());
+        dpFired.setValue(selected.getFired());
+        cbHasExpBook.setSelected(selected.getHasExpBook());
+        tfPhone.setText(selected.getPhone());
+        btnUpdateEmployee.setDisable(false);
+    }
+
+
+
+    private void saveEmployeeDetails(){
+        addedEmployee.setFname(tfFname.getText());
+        addedEmployee.setLname(tfLname.getText());
+        addedEmployee.setPatronymic(tfPatronymic.getText());
+        addedEmployee.setAddress(tfAddress.getText());
+        addedEmployee.setCode(tfCode.getText());
+        addedEmployee.setPassport(tfPassport.getText());
+        addedEmployee.setPosition(tfPosition.getText());
+        addedEmployee.setHired(dpHired.getValue());
+        addedEmployee.setFired(dpFired.getValue());
+        addedEmployee.setHasExpBook(cbHasExpBook.isSelected());
+        addedEmployee.setPhone(tfPhone.getText());
+        company.employees().add(addedEmployee);
+        addedEmployee = null;
+    }
+
+
+
+    private void updateEmployee(){
+        Employee selected = getSelectedEmployee();
+        selected.setFname(tfFname.getText());
+        selected.setLname(tfLname.getText());
+        selected.setPatronymic(tfPatronymic.getText());
+        selected.setAddress(tfAddress.getText());
+        selected.setCode(tfCode.getText());
+        selected.setPassport(tfPassport.getText());
+        selected.setPosition(tfPosition.getText());
+        selected.setHired(dpHired.getValue());
+        selected.setFired(dpFired.getValue());
+        selected.setHasExpBook(cbHasExpBook.isSelected());
+        selected.setPhone(tfPhone.getText());
+    }
+
+
+
+    private void clearSelections(){
+        lvEmployees.getSelectionModel().clearSelection();
+    }
+
+
+
+    private void removeEmployee(){
+        Employee selected = getSelectedEmployee();
+        company.employees().remove(selected);
     }
 
 
 
     @FXML
-    private void onBtnPrintDataClicked(){
-        PrinterAPI.getInstance().print(tvEmployee);
+    private void btnSaveClicked(){
+        saveEmployeeDetails();
+        updateEmployeesList();
+        btnRemoveEmployee.setDisable(false);
+        btnAddEmployee.setDisable(false);
+        btnSaveEmployee.setDisable(true);
+        Platform.runLater(hideDetailsAnimation::play);
+        detailesHidden = true;
     }
 
 
 
     @FXML
-    private void onBtnAddEmployeeClicked(){
-        company.addEmployee(new Employee());
+    private void btnRemoveClicked(){
+        removeEmployee();
+        updateEmployeesList();
+        Platform.runLater(hideDetailsAnimation::play);
+        detailesHidden = true;
     }
 
+
+
+    @FXML
+    private void btnUpdateClicked(){
+        updateEmployee();
+        btnAddEmployee.setDisable(false);
+        updateEmployeesList();
+        Platform.runLater(hideDetailsAnimation::play);
+        detailesHidden = true;
+    }
+
+
+
+    @FXML
+    private void btnCancelClicked(){
+        addedEmployee = null;
+        btnAddEmployee.setDisable(false);
+        btnSaveEmployee.setDisable(true);
+        Platform.runLater(hideDetailsAnimation::play);
+        detailesHidden = true;
+        clearSelections();
+    }
+
+
+
+    @FXML
+    private void btnAddClicked(){
+        btnAddEmployee.setDisable(true);
+        btnSaveEmployee.setDisable(false);
+        btnRemoveEmployee.setDisable(true);
+        addedEmployee = new Employee();
+        updateDetailsPanel(addedEmployee);
+    }
+
+
+
+    class EmployeeCell extends ListCell<Employee> {
+        @Override
+        protected void updateItem(Employee item, boolean empty){
+            super.updateItem(item, empty);
+            if (empty || item == null){
+                setText(null);
+            } else {
+                setText((getIndex() + 1) + ". " + item.getCode() + " " + String.join(" ", item.getLname(), item.getFname(), item.getPatronymic()));
+            }
+        }
+    }
 
 }
